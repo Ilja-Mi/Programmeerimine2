@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +10,19 @@ namespace KooliProjekt.Application.Data
         {
             context.Database.EnsureCreated();
 
-            if (context.Employees.Any())
+            var hasEmployees = context.Employees.Any();
+            if (!context.Administrators.Any())
+            {
+                context.Administrators.Add(new Administrator
+                {
+                    Name = "Näidisadministraator",
+                    Username = "sample_admin",
+                    Password = "sample_hash_not_for_login"
+                });
+                context.SaveChanges();
+            }
+
+            if (hasEmployees)
             {
                 return;
             }

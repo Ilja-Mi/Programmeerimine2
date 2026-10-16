@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace KooliProjekt.Application.Data
@@ -17,6 +18,7 @@ namespace KooliProjekt.Application.Data
 
         [Required]
         [StringLength(255)]
+        [JsonIgnore]
         public string Password { get; set; }
 
         public ICollection<Operation> Operations { get; set; }
