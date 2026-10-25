@@ -1,4 +1,4 @@
-﻿using KooliProjekt.Application.Infrastructure.Results;
+using KooliProjekt.Application.Infrastructure.Results;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -13,11 +13,19 @@ namespace KooliProjekt.WebAPI.Controllers
             new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
+#if(DEBUG)
+                Formatting = Formatting.Indented,
+#endif
                 NullValueHandling = NullValueHandling.Ignore                
             };
 
         protected IActionResult Result(OperationResult result)
         {
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             var serialized = JsonConvert.SerializeObject(result, _serializerSettings);
 
             if (result.HasErrors)
@@ -30,6 +38,11 @@ namespace KooliProjekt.WebAPI.Controllers
 
         protected IActionResult Result<T>(OperationResult<T> result)
         {
+            if (result == null)
+            {
+                return NotFound();
+            }
+
             var serialized = JsonConvert.SerializeObject(result, _serializerSettings);
 
             if (result.HasErrors)

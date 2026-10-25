@@ -1,6 +1,172 @@
-@KooliProjekt.WebAPI_HostAddress = http://localhost:5086
+@baseUrl = http://localhost:5086
+# Replace each Id with an existing Id from the corresponding List response.
+@carId = 1
+@employeeId = 1
+@administratorId = 1
+@operationTypeId = 1
+@operationId = 1
 
-GET {{KooliProjekt.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
+### Cars - 200: value.results and paging metadata
+GET {{baseUrl}}/api/Cars/list/1/10
 
-###
+### Cars - 200: next page (may be empty)
+GET {{baseUrl}}/api/Cars/list/2/10
+
+### Cars - 200: default page=1, pageSize=10
+GET {{baseUrl}}/api/Cars/list
+
+### Cars - 200: normalized to 1/10
+GET {{baseUrl}}/api/Cars/list/0/0
+
+### Cars - 200: normalized to 1/10
+GET {{baseUrl}}/api/Cars/list/-1/-1
+
+### Cars - 200: empty results for the sample database
+GET {{baseUrl}}/api/Cars/list/2147483647/10
+
+### Cars - 200: value contains DTO; choose Id from List
+GET {{baseUrl}}/api/Cars/get/{{carId}}
+
+### Cars - 404 if this Id does not exist
+GET {{baseUrl}}/api/Cars/get/2147483647
+
+### Cars - 404
+GET {{baseUrl}}/api/Cars/get/0
+
+### Cars - 404
+GET {{baseUrl}}/api/Cars/get/-1
+
+### Cars - 404
+GET {{baseUrl}}/api/Cars/get/
+
+### Employees - 200: value.results and paging metadata
+GET {{baseUrl}}/api/Employees/list/1/10
+
+### Employees - 200: next page (may be empty)
+GET {{baseUrl}}/api/Employees/list/2/10
+
+### Employees - 200: default page=1, pageSize=10
+GET {{baseUrl}}/api/Employees/list
+
+### Employees - 200: normalized to 1/10
+GET {{baseUrl}}/api/Employees/list/0/0
+
+### Employees - 200: normalized to 1/10
+GET {{baseUrl}}/api/Employees/list/-1/-1
+
+### Employees - 200: empty results for the sample database
+GET {{baseUrl}}/api/Employees/list/2147483647/10
+
+### Employees - 200: value contains DTO; choose Id from List
+GET {{baseUrl}}/api/Employees/get/{{employeeId}}
+
+### Employees - 404 if this Id does not exist
+GET {{baseUrl}}/api/Employees/get/2147483647
+
+### Employees - 404
+GET {{baseUrl}}/api/Employees/get/0
+
+### Employees - 404
+GET {{baseUrl}}/api/Employees/get/-1
+
+### Employees - 404
+GET {{baseUrl}}/api/Employees/get/
+
+### Administrators - 200: value.results and paging metadata
+GET {{baseUrl}}/api/Administrators/list/1/10
+
+### Administrators - 200: next page (may be empty)
+GET {{baseUrl}}/api/Administrators/list/2/10
+
+### Administrators - 200: default page=1, pageSize=10
+GET {{baseUrl}}/api/Administrators/list
+
+### Administrators - 200: normalized to 1/10
+GET {{baseUrl}}/api/Administrators/list/0/0
+
+### Administrators - 200: normalized to 1/10
+GET {{baseUrl}}/api/Administrators/list/-1/-1
+
+### Administrators - 200: empty results for the sample database
+GET {{baseUrl}}/api/Administrators/list/2147483647/10
+
+### Administrators - 200: value contains DTO; choose Id from List
+GET {{baseUrl}}/api/Administrators/get/{{administratorId}}
+
+### Administrators - 404 if this Id does not exist
+GET {{baseUrl}}/api/Administrators/get/2147483647
+
+### Administrators - 404
+GET {{baseUrl}}/api/Administrators/get/0
+
+### Administrators - 404
+GET {{baseUrl}}/api/Administrators/get/-1
+
+### Administrators - 404
+GET {{baseUrl}}/api/Administrators/get/
+
+### OperationTypes - 200: value.results and paging metadata
+GET {{baseUrl}}/api/OperationTypes/list/1/10
+
+### OperationTypes - 200: next page (may be empty)
+GET {{baseUrl}}/api/OperationTypes/list/2/10
+
+### OperationTypes - 200: default page=1, pageSize=10
+GET {{baseUrl}}/api/OperationTypes/list
+
+### OperationTypes - 200: normalized to 1/10
+GET {{baseUrl}}/api/OperationTypes/list/0/0
+
+### OperationTypes - 200: normalized to 1/10
+GET {{baseUrl}}/api/OperationTypes/list/-1/-1
+
+### OperationTypes - 200: empty results for the sample database
+GET {{baseUrl}}/api/OperationTypes/list/2147483647/10
+
+### OperationTypes - 200: value contains DTO; choose Id from List
+GET {{baseUrl}}/api/OperationTypes/get/{{operationTypeId}}
+
+### OperationTypes - 404 if this Id does not exist
+GET {{baseUrl}}/api/OperationTypes/get/2147483647
+
+### OperationTypes - 404
+GET {{baseUrl}}/api/OperationTypes/get/0
+
+### OperationTypes - 404
+GET {{baseUrl}}/api/OperationTypes/get/-1
+
+### OperationTypes - 404
+GET {{baseUrl}}/api/OperationTypes/get/
+
+### Operations - 200: value.results and paging metadata
+GET {{baseUrl}}/api/Operations/list/1/10
+
+### Operations - 200: next page (may be empty)
+GET {{baseUrl}}/api/Operations/list/2/10
+
+### Operations - 200: default page=1, pageSize=10
+GET {{baseUrl}}/api/Operations/list
+
+### Operations - 200: normalized to 1/10
+GET {{baseUrl}}/api/Operations/list/0/0
+
+### Operations - 200: normalized to 1/10
+GET {{baseUrl}}/api/Operations/list/-1/-1
+
+### Operations - 200: empty results for the sample database
+GET {{baseUrl}}/api/Operations/list/2147483647/10
+
+### Operations - 200: value contains DTO; choose Id from List
+GET {{baseUrl}}/api/Operations/get/{{operationId}}
+
+### Operations - 404 if this Id does not exist
+GET {{baseUrl}}/api/Operations/get/2147483647
+
+### Operations - 404
+GET {{baseUrl}}/api/Operations/get/0
+
+### Operations - 404
+GET {{baseUrl}}/api/Operations/get/-1
+
+### Operations - 404
+GET {{baseUrl}}/api/Operations/get/

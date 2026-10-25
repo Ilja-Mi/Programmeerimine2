@@ -25,27 +25,22 @@ namespace KooliProjekt.WebAPI.Controllers
 
             var query = new GetCarQuery { Id = id.Value };
             var result = await _mediator.Send(query, cancellationToken);
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            return Json(result);
+            return Result(result);
         }
 
-        [HttpGet("list")]
-        public async Task<IActionResult> List(CancellationToken cancellationToken)
+        [HttpGet("list/{page:int?}/{pageSize:int?}")]
+        public async Task<IActionResult> List(
+            [FromRoute] int page = 1,
+            [FromRoute] int pageSize = 10,
+            CancellationToken cancellationToken = default)
         {
-            var query = new ListCarsQuery();
-            var result = await _mediator.Send(query, cancellationToken);
-
-            if (result == null)
+            var query = new ListCarsQuery
             {
-                return NotFound();
-            }
-
-            return Json(result);
+                Page = page,
+                PageSize = pageSize
+            };
+            var result = await _mediator.Send(query, cancellationToken);
+            return Result(result);
         }
     }
 }
