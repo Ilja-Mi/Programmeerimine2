@@ -42,5 +42,19 @@ namespace KooliProjekt.WebAPI.Controllers
             var result = await _mediator.Send(query, cancellationToken);
             return Result(result);
         }
+
+        [HttpPost("save")]
+        public async Task<IActionResult> Save([FromBody] SaveAdministratorCommand command, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Result(result);
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete([FromBody] DeleteAdministratorCommand command, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Result(result);
+        }
     }
 }

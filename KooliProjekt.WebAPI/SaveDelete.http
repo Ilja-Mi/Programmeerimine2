@@ -1,0 +1,515 @@
+@baseUrl = http://localhost:5086
+# Run against a test database. These requests CREATE, UPDATE and DELETE data.
+# The expected responses below have NOT been verified against a running API.
+# First create test records. Then get their IDs from List and replace the zero placeholders.
+# For Operation creation use the IDs of the newly created Car and OperationType.
+# Delete the test Operation before the OperationType. Delete only your test records.
+# Save: Id=0 creates; Id>0 updates. Success is 200 with an OperationResult.
+# Swagger: http://localhost:5086/swagger -> endpoint -> Try it out -> Execute.
+# The API does not implement login. Employee passwords are hashed on Save.
+@carId = 0
+@employeeId = 0
+@administratorId = 0
+@operationTypeId = 0
+@operationId = 0
+
+### Cars: CREATE (expected 200)
+POST {{baseUrl}}/api/Cars/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "manufacturer": "Test",
+  "model": "School car",
+  "licensePlate": "TEST3010"
+}
+
+### Cars: LIST - find the ID of the created test record; change the variable above
+GET {{baseUrl}}/api/Cars/list/1/100
+
+### Cars: GET created record (expected 200 after setting the ID)
+GET {{baseUrl}}/api/Cars/get/{{carId}}
+
+### Cars: UPDATE (expected 200; blank employee password preserves the existing hash)
+POST {{baseUrl}}/api/Cars/save
+Content-Type: application/json
+
+{
+  "id": {{carId}},
+  "manufacturer": "Test",
+  "model": "Updated test model",
+  "licensePlate": "TEST3010"
+}
+
+### Cars: GET again - verify the updated fields
+GET {{baseUrl}}/api/Cars/get/{{carId}}
+
+### Cars: invalid input (expected 400)
+POST {{baseUrl}}/api/Cars/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "manufacturer": "",
+  "model": "School car",
+  "licensePlate": "TEST3010"
+}
+
+### Cars: negative Id (expected 400)
+POST {{baseUrl}}/api/Cars/save
+Content-Type: application/json
+
+{
+  "id": -1,
+  "manufacturer": "Test",
+  "model": "School car",
+  "licensePlate": "TEST3010"
+}
+
+### Cars: update missing Id (expected 400; use valid related IDs for Operation)
+POST {{baseUrl}}/api/Cars/save
+Content-Type: application/json
+
+{
+  "id": 2147483647,
+  "manufacturer": "Test",
+  "model": "School car",
+  "licensePlate": "TEST3010"
+}
+
+### Cars: invalid Delete Id (expected 400)
+DELETE {{baseUrl}}/api/Cars/delete
+Content-Type: application/json
+
+{
+  "id": 0
+}
+
+### Employees: CREATE (expected 200)
+POST {{baseUrl}}/api/Employees/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "Test Employee",
+  "username": "test_employee_3010",
+  "password": "School-test-3010!"
+}
+
+### Employees: LIST - find the ID of the created test record; change the variable above
+GET {{baseUrl}}/api/Employees/list/1/100
+
+### Employees: GET created record (expected 200 after setting the ID)
+GET {{baseUrl}}/api/Employees/get/{{employeeId}}
+
+### Employees: UPDATE (expected 200; blank employee password preserves the existing hash)
+POST {{baseUrl}}/api/Employees/save
+Content-Type: application/json
+
+{
+  "id": {{employeeId}},
+  "name": "Updated Employee",
+  "username": "test_employee_3010",
+  "password": ""
+}
+
+### Employees: GET again - verify the updated fields
+GET {{baseUrl}}/api/Employees/get/{{employeeId}}
+
+### Employees: invalid input (expected 400)
+POST {{baseUrl}}/api/Employees/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "",
+  "username": "test_employee_3010",
+  "password": "School-test-3010!"
+}
+
+### Employees: negative Id (expected 400)
+POST {{baseUrl}}/api/Employees/save
+Content-Type: application/json
+
+{
+  "id": -1,
+  "name": "Test Employee",
+  "username": "test_employee_3010",
+  "password": "School-test-3010!"
+}
+
+### Employees: update missing Id (expected 400; use valid related IDs for Operation)
+POST {{baseUrl}}/api/Employees/save
+Content-Type: application/json
+
+{
+  "id": 2147483647,
+  "name": "Test Employee",
+  "username": "test_employee_3010",
+  "password": "School-test-3010!"
+}
+
+### Employees: invalid Delete Id (expected 400)
+DELETE {{baseUrl}}/api/Employees/delete
+Content-Type: application/json
+
+{
+  "id": 0
+}
+
+### Employees: create without password (expected 400)
+POST {{baseUrl}}/api/Employees/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "Test Employee",
+  "username": "test_employee_3010",
+  "password": ""
+}
+
+### Administrators: CREATE (expected 200)
+POST {{baseUrl}}/api/Administrators/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "Test Administrator",
+  "username": "test_admin_3010",
+  "password": "School-test-3010!"
+}
+
+### Administrators: LIST - find the ID of the created test record; change the variable above
+GET {{baseUrl}}/api/Administrators/list/1/100
+
+### Administrators: GET created record (expected 200 after setting the ID)
+GET {{baseUrl}}/api/Administrators/get/{{administratorId}}
+
+### Administrators: UPDATE (expected 200; blank employee password preserves the existing hash)
+POST {{baseUrl}}/api/Administrators/save
+Content-Type: application/json
+
+{
+  "id": {{administratorId}},
+  "name": "Updated Administrator",
+  "username": "test_admin_3010",
+  "password": ""
+}
+
+### Administrators: GET again - verify the updated fields
+GET {{baseUrl}}/api/Administrators/get/{{administratorId}}
+
+### Administrators: invalid input (expected 400)
+POST {{baseUrl}}/api/Administrators/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "",
+  "username": "test_admin_3010",
+  "password": "School-test-3010!"
+}
+
+### Administrators: negative Id (expected 400)
+POST {{baseUrl}}/api/Administrators/save
+Content-Type: application/json
+
+{
+  "id": -1,
+  "name": "Test Administrator",
+  "username": "test_admin_3010",
+  "password": "School-test-3010!"
+}
+
+### Administrators: update missing Id (expected 400; use valid related IDs for Operation)
+POST {{baseUrl}}/api/Administrators/save
+Content-Type: application/json
+
+{
+  "id": 2147483647,
+  "name": "Test Administrator",
+  "username": "test_admin_3010",
+  "password": "School-test-3010!"
+}
+
+### Administrators: invalid Delete Id (expected 400)
+DELETE {{baseUrl}}/api/Administrators/delete
+Content-Type: application/json
+
+{
+  "id": 0
+}
+
+### Administrators: create without password (expected 400)
+POST {{baseUrl}}/api/Administrators/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "Test Administrator",
+  "username": "test_admin_3010",
+  "password": ""
+}
+
+### OperationTypes: CREATE (expected 200)
+POST {{baseUrl}}/api/OperationTypes/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "Test service 3010",
+  "description": "Created for the Save/Delete homework"
+}
+
+### OperationTypes: LIST - find the ID of the created test record; change the variable above
+GET {{baseUrl}}/api/OperationTypes/list/1/100
+
+### OperationTypes: GET created record (expected 200 after setting the ID)
+GET {{baseUrl}}/api/OperationTypes/get/{{operationTypeId}}
+
+### OperationTypes: UPDATE (expected 200; blank employee password preserves the existing hash)
+POST {{baseUrl}}/api/OperationTypes/save
+Content-Type: application/json
+
+{
+  "id": {{operationTypeId}},
+  "name": "Test service 3010",
+  "description": "Updated description"
+}
+
+### OperationTypes: GET again - verify the updated fields
+GET {{baseUrl}}/api/OperationTypes/get/{{operationTypeId}}
+
+### OperationTypes: invalid input (expected 400)
+POST {{baseUrl}}/api/OperationTypes/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "name": "",
+  "description": "Created for the Save/Delete homework"
+}
+
+### OperationTypes: negative Id (expected 400)
+POST {{baseUrl}}/api/OperationTypes/save
+Content-Type: application/json
+
+{
+  "id": -1,
+  "name": "Test service 3010",
+  "description": "Created for the Save/Delete homework"
+}
+
+### OperationTypes: update missing Id (expected 400; use valid related IDs for Operation)
+POST {{baseUrl}}/api/OperationTypes/save
+Content-Type: application/json
+
+{
+  "id": 2147483647,
+  "name": "Test service 3010",
+  "description": "Created for the Save/Delete homework"
+}
+
+### OperationTypes: invalid Delete Id (expected 400)
+DELETE {{baseUrl}}/api/OperationTypes/delete
+Content-Type: application/json
+
+{
+  "id": 0
+}
+
+### Operations: CREATE (expected 200)
+POST {{baseUrl}}/api/Operations/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "date": "2026-10-30T10:00:00",
+  "status": 0,
+  "cost": 25,
+  "carId": {{carId}},
+  "operationTypeId": {{operationTypeId}},
+  "employeeId": null
+}
+
+### Operations: LIST - find the ID of the created test record; change the variable above
+GET {{baseUrl}}/api/Operations/list/1/100
+
+### Operations: GET created record (expected 200 after setting the ID)
+GET {{baseUrl}}/api/Operations/get/{{operationId}}
+
+### Operations: UPDATE (expected 200; blank employee password preserves the existing hash)
+POST {{baseUrl}}/api/Operations/save
+Content-Type: application/json
+
+{
+  "id": {{operationId}},
+  "date": "2026-10-30T10:00:00",
+  "status": 1,
+  "cost": 30,
+  "carId": {{carId}},
+  "operationTypeId": {{operationTypeId}},
+  "employeeId": null
+}
+
+### Operations: GET again - verify the updated fields
+GET {{baseUrl}}/api/Operations/get/{{operationId}}
+
+### Operations: invalid input (expected 400)
+POST {{baseUrl}}/api/Operations/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "date": "2026-10-30T10:00:00",
+  "status": 999,
+  "cost": 25,
+  "carId": {{carId}},
+  "operationTypeId": {{operationTypeId}},
+  "employeeId": null
+}
+
+### Operations: negative Id (expected 400)
+POST {{baseUrl}}/api/Operations/save
+Content-Type: application/json
+
+{
+  "id": -1,
+  "date": "2026-10-30T10:00:00",
+  "status": 0,
+  "cost": 25,
+  "carId": {{carId}},
+  "operationTypeId": {{operationTypeId}},
+  "employeeId": null
+}
+
+### Operations: update missing Id (expected 400; use valid related IDs for Operation)
+POST {{baseUrl}}/api/Operations/save
+Content-Type: application/json
+
+{
+  "id": 2147483647,
+  "date": "2026-10-30T10:00:00",
+  "status": 0,
+  "cost": 25,
+  "carId": {{carId}},
+  "operationTypeId": {{operationTypeId}},
+  "employeeId": null
+}
+
+### Operations: invalid Delete Id (expected 400)
+DELETE {{baseUrl}}/api/Operations/delete
+Content-Type: application/json
+
+{
+  "id": 0
+}
+
+### Operations: unknown CarId (expected 400)
+POST {{baseUrl}}/api/Operations/save
+Content-Type: application/json
+
+{
+  "id": 0,
+  "date": "2026-10-30T10:00:00",
+  "status": 0,
+  "cost": 25,
+  "carId": 2147483647,
+  "operationTypeId": {{operationTypeId}},
+  "employeeId": null
+}
+
+### Operations: DELETE ONLY THE CREATED TEST RECORD (expected 200)
+DELETE {{baseUrl}}/api/Operations/delete
+Content-Type: application/json
+
+{
+  "id": {{operationId}}
+}
+
+### Operations: GET deleted record (expected 404)
+GET {{baseUrl}}/api/Operations/get/{{operationId}}
+
+### Operations: DELETE again (expected 200, same no-op behavior as teacher example)
+DELETE {{baseUrl}}/api/Operations/delete
+Content-Type: application/json
+
+{
+  "id": {{operationId}}
+}
+
+### OperationTypes: DELETE ONLY THE CREATED TEST RECORD (expected 200)
+DELETE {{baseUrl}}/api/OperationTypes/delete
+Content-Type: application/json
+
+{
+  "id": {{operationTypeId}}
+}
+
+### OperationTypes: GET deleted record (expected 404)
+GET {{baseUrl}}/api/OperationTypes/get/{{operationTypeId}}
+
+### OperationTypes: DELETE again (expected 200, same no-op behavior as teacher example)
+DELETE {{baseUrl}}/api/OperationTypes/delete
+Content-Type: application/json
+
+{
+  "id": {{operationTypeId}}
+}
+
+### Cars: DELETE ONLY THE CREATED TEST RECORD (expected 200)
+DELETE {{baseUrl}}/api/Cars/delete
+Content-Type: application/json
+
+{
+  "id": {{carId}}
+}
+
+### Cars: GET deleted record (expected 404)
+GET {{baseUrl}}/api/Cars/get/{{carId}}
+
+### Cars: DELETE again (expected 200, same no-op behavior as teacher example)
+DELETE {{baseUrl}}/api/Cars/delete
+Content-Type: application/json
+
+{
+  "id": {{carId}}
+}
+
+### Administrators: DELETE ONLY THE CREATED TEST RECORD (expected 200)
+DELETE {{baseUrl}}/api/Administrators/delete
+Content-Type: application/json
+
+{
+  "id": {{administratorId}}
+}
+
+### Administrators: GET deleted record (expected 404)
+GET {{baseUrl}}/api/Administrators/get/{{administratorId}}
+
+### Administrators: DELETE again (expected 200, same no-op behavior as teacher example)
+DELETE {{baseUrl}}/api/Administrators/delete
+Content-Type: application/json
+
+{
+  "id": {{administratorId}}
+}
+
+### Employees: DELETE ONLY THE CREATED TEST RECORD (expected 200)
+DELETE {{baseUrl}}/api/Employees/delete
+Content-Type: application/json
+
+{
+  "id": {{employeeId}}
+}
+
+### Employees: GET deleted record (expected 404)
+GET {{baseUrl}}/api/Employees/get/{{employeeId}}
+
+### Employees: DELETE again (expected 200, same no-op behavior as teacher example)
+DELETE {{baseUrl}}/api/Employees/delete
+Content-Type: application/json
+
+{
+  "id": {{employeeId}}
+}
