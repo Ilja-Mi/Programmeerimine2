@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,8 +25,10 @@ namespace KooliProjekt.Application.Behaviors
             var response = new TResponse();
             var context = new ValidationContext<TRequest>(request);
             
-            var validationFailures = await Task.WhenAll(
-                _validators.Select(validator => validator.ValidateAsync(context)));
+            // Validators may share the scoped DbContext: execute them sequentially.
+            var validationFailures = new List<FluentValidation.Results.ValidationResult>();
+            foreach (var validator in _validators)
+                validationFailures.Add(await validator.ValidateAsync(context, cancellationToken));
 
             var errors = validationFailures
                 .Where(validationResult => !validationResult.IsValid)

@@ -1,3 +1,6 @@
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using KooliProjekt.Application.Infrastructure.Files;
 using System.Threading;
 using System.Threading.Tasks;
 using KooliProjekt.Application.Features.Cars;
@@ -56,5 +59,35 @@ namespace KooliProjekt.WebAPI.Controllers
             var result = await _mediator.Send(command, cancellationToken);
             return Result(result);
         }
+        [HttpPost("{id:int}/files")]
+        [Consumes("multipart/form-data")]
+        [RequestSizeLimit(11 * 1024 * 1024)]
+        public async Task<IActionResult> AddFile(int id, [FromForm] CarFileUpload upload, CancellationToken cancellationToken)
+        {
+            var file = upload?.File;
+            if (file == null || file.Length == 0 || file.Length > FileRules.MaxBytes)
+                return BadRequest("Provide an image from 1 byte to 10 MiB.");
+            using var stream = new MemoryStream();
+            using (var input = file.OpenReadStream()) await input.CopyToAsync(stream, cancellationToken);
+            stream.Position = 0;
+            return Result(await _mediator.Send(new AddFileCommand
+            { Id = id, FileName = file.FileName, InputStream = stream }, cancellationToken));
+        }
+
+        [HttpGet("{id:int}/files")]
+        public async Task<IActionResult> ListFiles(int id, CancellationToken cancellationToken)
+            => Result(await _mediator.Send(new ListFilesQuery { Id = id }, cancellationToken));
+
+        [HttpGet("{id:int}/files/{fileName}")]
+        public async Task<IActionResult> GetFile(int id, string fileName, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(new GetFileCommand { Id = id, FileName = fileName }, cancellationToken);
+            if (result == null || result.HasErrors || result.Value == null) return Result(result);
+            return File(result.Value, FileRules.ContentType(fileName), fileName);
+        }
+
+        [HttpDelete("{id:int}/files/{fileName}")]
+        public async Task<IActionResult> DeleteFile(int id, string fileName, CancellationToken cancellationToken)
+            => Result(await _mediator.Send(new DeleteFileCommand { Id = id, FileName = fileName }, cancellationToken));
     }
 }

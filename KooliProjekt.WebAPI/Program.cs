@@ -1,3 +1,5 @@
+using System.IO;
+using KooliProjekt.Application.Infrastructure.Files;
 using FluentValidation;
 using KooliProjekt.Application.Behaviors;
 using KooliProjekt.Application.Data;
@@ -28,6 +30,10 @@ namespace KooliProjekt.WebAPI
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            var filesRoot = builder.Configuration["FilesRoot"] ?? "Files";
+            if (!Path.IsPathRooted(filesRoot)) filesRoot = Path.Combine(builder.Environment.ContentRootPath, filesRoot);
+            builder.Services.AddSingleton<IFileClient>(new LocalFileClient(filesRoot));
 
             var applicationAssembly = typeof(ErrorHandlingBehavior<,>).Assembly;
             builder.Services.AddValidatorsFromAssembly(applicationAssembly);
