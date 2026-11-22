@@ -30,6 +30,7 @@ namespace KooliProjekt.Application.Features.Employees
                     Id = item.Id,
                     Name = item.Name,
                     Username = item.Username,
+                    IsAdmin = item.IsAdmin,
                     OperationCount = item.Operations.Count
                 })
                 .GetPagedAsync(request.Page, request.PageSize, cancellationToken);

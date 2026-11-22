@@ -10,6 +10,8 @@ namespace KooliProjekt.Application.Features.Administrators
     {
         public int Id { get; set; }
 
+        public bool IsAdmin { get; set; }
+
         [Required]
         [StringLength(100)]
         public string Name { get; set; }

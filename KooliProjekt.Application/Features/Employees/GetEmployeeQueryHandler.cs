@@ -29,6 +29,7 @@ namespace KooliProjekt.Application.Features.Employees
                     Id = item.Id,
                     Name = item.Name,
                     Username = item.Username,
+                    IsAdmin = item.IsAdmin,
                     Operations = item.Operations.OrderByDescending(operation => operation.Date)
                         .ThenByDescending(operation => operation.Id)
                         .Select(operation => new OperationListItemDto

@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using KooliProjekt.Application.Data;
 using KooliProjekt.Application.Infrastructure.Results;
-using KooliProjekt.Application.Infrastructure.Security;
+using KooliProjekt.Application.Authentication;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,9 +48,10 @@ namespace KooliProjekt.Application.Features.Employees
 
             item.Name = request.Name;
             item.Username = request.Username;
+            item.IsAdmin = request.IsAdmin;
             if (!string.IsNullOrWhiteSpace(request.Password))
             {
-                item.Password = PasswordHash.Create(request.Password);
+                item.Password = PasswordHelper.Hash(request.Password);
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);

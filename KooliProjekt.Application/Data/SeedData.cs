@@ -8,7 +8,7 @@ namespace KooliProjekt.Application.Data
     {
         public static void Initialize(ApplicationDbContext context)
         {
-            context.Database.EnsureCreated();
+            // The schema is managed by EF migrations in Program.cs.
 
             var hasEmployees = context.Employees.Any();
             if (!context.Administrators.Any())
@@ -17,6 +17,7 @@ namespace KooliProjekt.Application.Data
                 {
                     Name = "Näidisadministraator",
                     Username = "sample_admin",
+                    IsAdmin = true,
                     Password = "sample_hash_not_for_login"
                 });
                 context.SaveChanges();
